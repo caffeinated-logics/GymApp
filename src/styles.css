@@ -175,7 +175,7 @@ input[type='date']::-webkit-calendar-picker-indicator { filter: invert(0.7); }
 .field { display: flex; flex-direction: column; gap: 0.4rem; }
 .field > span { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
 .ex-editor { display: flex; flex-direction: column; gap: 0.5rem; }
-.ex-editor-head, .ex-editor-row { display: grid; grid-template-columns: 2.2fr 1.2fr 1fr 0.8fr 34px; gap: 0.5rem; align-items: center; }
+.ex-editor-head, .ex-editor-row { display: grid; grid-template-columns: 2.2fr 0.8fr 1fr 1.2fr 34px; gap: 0.5rem; align-items: center; }
 .ex-editor-head span { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .add-ex { align-self: flex-start; margin-top: 0.25rem; }
 .form-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }

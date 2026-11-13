@@ -27,18 +27,18 @@ export default function WorkoutCard({ workout, showDate = true }: { workout: Wor
             <thead>
               <tr>
                 <th>Exercise</th>
-                <th>Weight</th>
-                <th>Reps</th>
                 <th>Sets</th>
+                <th>Reps</th>
+                <th>Weight</th>
               </tr>
             </thead>
             <tbody>
               {workout.exercises.map((e) => (
                 <tr key={e.id}>
                   <td className="ex-name">{e.name || '—'}</td>
-                  <td>{e.weight || '—'}</td>
-                  <td>{e.reps || '—'}</td>
                   <td>{e.sets === '' ? '—' : e.sets}</td>
+                  <td>{e.reps || '—'}</td>
+                  <td>{e.weight || '—'}</td>
                 </tr>
               ))}
             </tbody>

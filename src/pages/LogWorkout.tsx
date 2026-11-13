@@ -78,9 +78,9 @@ export default function LogWorkout() {
         <div className="ex-editor">
           <div className="ex-editor-head">
             <span>Exercise</span>
-            <span>Weight</span>
-            <span>Reps</span>
             <span>Sets</span>
+            <span>Reps</span>
+            <span>Weight</span>
             <span />
           </div>
           {form.exercises.map((ex, i) => (
@@ -92,10 +92,12 @@ export default function LogWorkout() {
                 onChange={(e) => setEx(ex.id, { name: e.target.value })}
               />
               <input
-                aria-label="Weight"
-                placeholder="60 kg"
-                value={ex.weight}
-                onChange={(e) => setEx(ex.id, { weight: e.target.value })}
+                aria-label="Sets"
+                type="number"
+                min={0}
+                placeholder="3"
+                value={ex.sets}
+                onChange={(e) => setEx(ex.id, { sets: e.target.value === '' ? '' : Number(e.target.value) })}
               />
               <input
                 aria-label="Reps"
@@ -104,12 +106,10 @@ export default function LogWorkout() {
                 onChange={(e) => setEx(ex.id, { reps: e.target.value })}
               />
               <input
-                aria-label="Sets"
-                type="number"
-                min={0}
-                placeholder="3"
-                value={ex.sets}
-                onChange={(e) => setEx(ex.id, { sets: e.target.value === '' ? '' : Number(e.target.value) })}
+                aria-label="Weight"
+                placeholder="60 kg"
+                value={ex.weight}
+                onChange={(e) => setEx(ex.id, { weight: e.target.value })}
               />
               <button
                 type="button"
