@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import WeekView from './pages/WeekView'
 import LogWorkout from './pages/LogWorkout'
 import History from './pages/History'
+import Backup from './pages/Backup'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="log" element={<LogWorkout />} />
             <Route path="log/:id" element={<LogWorkout />} />
             <Route path="history" element={<History />} />
+            <Route path="backup" element={<Backup />} />
             <Route path="*" element={<Dashboard />} />
           </Route>
         </Routes>

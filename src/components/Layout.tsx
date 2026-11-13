@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { CalendarDays, Dumbbell, History, LayoutDashboard, Plus } from 'lucide-react'
+import { CalendarDays, DatabaseBackup, Dumbbell, History, LayoutDashboard, Plus } from 'lucide-react'
 
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/week', label: 'This Week', icon: CalendarDays },
   { to: '/log', label: 'Log Workout', icon: Plus },
   { to: '/history', label: 'History', icon: History },
+  { to: '/backup', label: 'Backup', icon: DatabaseBackup },
 ]
 
 export default function Layout() {
@@ -26,7 +27,9 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <p className="sidebar-foot">Data is saved in this browser.</p>
+        <p className="sidebar-foot">
+          Data is saved in this browser. <NavLink to="/backup">Back it up</NavLink> to move it to another device.
+        </p>
       </aside>
 
       <main className="main">

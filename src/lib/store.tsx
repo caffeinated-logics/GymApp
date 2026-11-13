@@ -53,6 +53,8 @@ interface Store {
   get: (id: string) => Workout | undefined
   save: (w: Workout) => void
   remove: (id: string) => void
+  /** Restore from backup. 'replace' wipes current data; 'merge' adds/overwrites by id. */
+  importAll: (ws: Workout[], mode: 'replace' | 'merge') => void
 }
 
 const Ctx = createContext<Store | null>(null)
@@ -77,6 +79,13 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
           prev.some((p) => p.id === w.id) ? prev.map((p) => (p.id === w.id ? w : p)) : [...prev, w],
         ),
       remove: (id) => setWorkouts((prev) => prev.filter((p) => p.id !== id)),
+      importAll: (ws, mode) =>
+        setWorkouts((prev) => {
+          if (mode === 'replace') return ws
+          const byId = new Map(prev.map((w) => [w.id, w]))
+          for (const w of ws) byId.set(w.id, w)
+          return [...byId.values()]
+        }),
     }),
     [workouts],
   )
