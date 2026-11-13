@@ -3,6 +3,11 @@ export interface Exercise {
   name: string
   /** Free text, e.g. "60 kg", "bodyweight", "20/22.5/25" */
   weight: string
+  /**
+   * Optional weight for each individual set (index 0 = set 1). When present, it is used
+   * instead of `weight`. Free text per set, e.g. "60", "62.5 kg".
+   */
+  setWeights?: string[]
   /** Free text, e.g. "10" or "12, 10, 8" */
   reps: string
   sets: number | ''

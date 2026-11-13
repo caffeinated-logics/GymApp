@@ -7,6 +7,6 @@ export function cloneWorkout(w: Workout, date: string): Workout {
     ...w,
     id: uid(),
     date,
-    exercises: w.exercises.map((e) => ({ ...e, id: uid() })),
+    exercises: w.exercises.map((e) => ({ ...e, id: uid(), setWeights: e.setWeights && [...e.setWeights] })),
   }
 }

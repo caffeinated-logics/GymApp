@@ -4,6 +4,7 @@ import { Copy, Pencil } from 'lucide-react'
 import type { Workout } from '../lib/types'
 import { fmt, fromISO } from '../lib/dates'
 import CopyWorkoutDialog from './CopyWorkoutDialog'
+import { weightLabel } from '../lib/weights'
 
 export default function WorkoutCard({ workout, showDate = true }: { workout: Workout; showDate?: boolean }) {
   const [copying, setCopying] = useState(false)
@@ -44,7 +45,7 @@ export default function WorkoutCard({ workout, showDate = true }: { workout: Wor
                   <td className="ex-name">{e.name || '—'}</td>
                   <td>{e.sets === '' ? '—' : e.sets}</td>
                   <td>{e.reps || '—'}</td>
-                  <td>{e.weight || '—'}</td>
+                  <td title={e.setWeights ? 'Weight for each set' : undefined}>{weightLabel(e) || '—'}</td>
                 </tr>
               ))}
             </tbody>

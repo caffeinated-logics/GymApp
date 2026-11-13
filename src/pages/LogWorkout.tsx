@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Plus, Save, Trash2, X } from 'lucide-react'
 import { uid, useWorkouts } from '../lib/store'
 import { toISO } from '../lib/dates'
+import { setWeightList } from '../lib/weights'
 import type { Exercise, Workout } from '../lib/types'
 
 const blankExercise = (): Exercise => ({ id: uid(), name: '', weight: '', reps: '', sets: '' })
@@ -38,7 +39,10 @@ export default function LogWorkout() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
-    save({ ...form, exercises: form.exercises.filter((x) => x.name.trim() || x.weight || x.reps || x.sets !== '') })
+    const exercises = form.exercises
+      .map((x) => (x.setWeights ? { ...x, setWeights: setWeightList(x) } : x)) // trim/pad to the number of sets
+      .filter((x) => x.name.trim() || x.weight || x.setWeights?.some((w) => w.trim()) || x.reps || x.sets !== '')
+    save({ ...form, exercises })
     navigate('/week')
   }
 
@@ -84,41 +88,86 @@ export default function LogWorkout() {
             <span />
           </div>
           {form.exercises.map((ex, i) => (
-            <div key={ex.id} className="ex-editor-row">
-              <input
-                aria-label={`Exercise ${i + 1} name`}
-                placeholder="Bench Press"
-                value={ex.name}
-                onChange={(e) => setEx(ex.id, { name: e.target.value })}
-              />
-              <input
-                aria-label="Sets"
-                type="number"
-                min={0}
-                placeholder="3"
-                value={ex.sets}
-                onChange={(e) => setEx(ex.id, { sets: e.target.value === '' ? '' : Number(e.target.value) })}
-              />
-              <input
-                aria-label="Reps"
-                placeholder="10"
-                value={ex.reps}
-                onChange={(e) => setEx(ex.id, { reps: e.target.value })}
-              />
-              <input
-                aria-label="Weight"
-                placeholder="60 kg"
-                value={ex.weight}
-                onChange={(e) => setEx(ex.id, { weight: e.target.value })}
-              />
-              <button
-                type="button"
-                className="icon-btn danger"
-                aria-label="Remove exercise"
-                onClick={() => setForm((f) => ({ ...f, exercises: f.exercises.filter((x) => x.id !== ex.id) }))}
-              >
-                <X size={16} />
-              </button>
+            <div key={ex.id} className="ex-item">
+              <div className="ex-editor-row">
+                <input
+                  aria-label={`Exercise ${i + 1} name`}
+                  placeholder="Bench Press"
+                  value={ex.name}
+                  onChange={(e) => setEx(ex.id, { name: e.target.value })}
+                />
+                <input
+                  aria-label="Sets"
+                  type="number"
+                  min={0}
+                  placeholder="3"
+                  value={ex.sets}
+                  onChange={(e) => setEx(ex.id, { sets: e.target.value === '' ? '' : Number(e.target.value) })}
+                />
+                <input
+                  aria-label="Reps"
+                  placeholder="10"
+                  value={ex.reps}
+                  onChange={(e) => setEx(ex.id, { reps: e.target.value })}
+                />
+                {ex.setWeights ? (
+                  <input aria-label="Weight (set below)" value="Per set ↓" disabled className="per-set-flag" />
+                ) : (
+                  <input
+                    aria-label="Weight"
+                    placeholder="60 kg"
+                    value={ex.weight}
+                    onChange={(e) => setEx(ex.id, { weight: e.target.value })}
+                  />
+                )}
+                <button
+                  type="button"
+                  className="icon-btn danger"
+                  aria-label="Remove exercise"
+                  onClick={() => setForm((f) => ({ ...f, exercises: f.exercises.filter((x) => x.id !== ex.id) }))}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <label className="per-set-toggle">
+                <input
+                  type="checkbox"
+                  checked={!!ex.setWeights}
+                  onChange={(e) =>
+                    setEx(
+                      ex.id,
+                      e.target.checked
+                        ? { setWeights: Array.from({ length: Number(ex.sets) || 0 }, () => ex.weight) }
+                        : { setWeights: undefined, weight: ex.weight || ex.setWeights?.find((w) => w.trim()) || '' },
+                    )
+                  }
+                />
+                Different weight for each set
+              </label>
+
+              {ex.setWeights &&
+                (setWeightList(ex).length === 0 ? (
+                  <p className="hint">Enter the number of sets to set a weight for each one.</p>
+                ) : (
+                  <div className="set-weights">
+                    {setWeightList(ex).map((w, si) => (
+                      <label key={si} className="set-w">
+                        <span>Set {si + 1}</span>
+                        <input
+                          aria-label={`${ex.name || 'Exercise'} set ${si + 1} weight`}
+                          placeholder="60 kg"
+                          value={w}
+                          onChange={(e) => {
+                            const next = setWeightList(ex)
+                            next[si] = e.target.value
+                            setEx(ex.id, { setWeights: next })
+                          }}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                ))}
             </div>
           ))}
           <button

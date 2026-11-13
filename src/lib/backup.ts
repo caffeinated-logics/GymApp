@@ -40,6 +40,7 @@ function cleanExercise(raw: unknown): Exercise | null {
     id: str(e.id) || uid(),
     name: str(e.name),
     weight: str(e.weight),
+    ...(Array.isArray(e.setWeights) ? { setWeights: e.setWeights.map(str) } : {}),
     reps: str(e.reps),
     sets: sets === '' || Number.isNaN(sets) ? '' : sets,
   }

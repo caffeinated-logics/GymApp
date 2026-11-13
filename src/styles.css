@@ -277,3 +277,19 @@ input[type='date']::-webkit-calendar-picker-indicator { filter: invert(0.7); }
 .mode label { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; cursor: pointer; }
 .mode input { width: auto; accent-color: var(--accent); }
 .modal .kv { margin-bottom: 0.9rem; }
+
+/* ---------- Per-set weights ---------- */
+.ex-item { display: flex; flex-direction: column; gap: 0.45rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+.ex-item:last-of-type { border-bottom: none; }
+.per-set-toggle { display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start; font-size: 0.8rem; color: var(--muted); cursor: pointer; }
+.per-set-toggle input { width: auto; accent-color: var(--accent); }
+.per-set-flag { color: var(--accent) !important; font-weight: 600; opacity: 1 !important; background: var(--accent-soft) !important; border-color: transparent !important; }
+.set-weights { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.5rem; padding: 0.6rem; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); }
+.set-w { display: flex; flex-direction: column; gap: 0.25rem; }
+.set-w span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.set-w input { background: var(--surface); }
+.ex-item .hint { margin: 0; }
+@media (max-width: 560px) {
+  .ex-item { padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); }
+  .ex-item .ex-editor-row { padding: 0; border: none; background: none; }
+}
