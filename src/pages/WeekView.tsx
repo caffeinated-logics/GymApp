@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Copy, Plus } from 'lucide-react'
+import CopyWeekDialog from '../components/CopyWeekDialog'
 import { countDays, useWorkouts } from '../lib/store'
 import { addDays, fmt, startOfWeek, toISO, weekDays } from '../lib/dates'
 import WorkoutCard from '../components/WorkoutCard'
@@ -8,6 +9,7 @@ import WorkoutCard from '../components/WorkoutCard'
 export default function WeekView() {
   const { workouts } = useWorkouts()
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()))
+  const [copyingWeek, setCopyingWeek] = useState(false)
   const days = weekDays(weekStart)
   const todayISO = toISO(new Date())
   const isCurrent = toISO(weekStart) === toISO(startOfWeek(new Date()))
@@ -25,6 +27,9 @@ export default function WeekView() {
           </h1>
         </div>
         <div className="week-nav">
+          <button className="btn btn-ghost" onClick={() => setCopyingWeek(true)} disabled={!weekWorkouts.length}>
+            <Copy size={16} /> Copy week
+          </button>
           <button className="icon-btn" onClick={() => setWeekStart(addDays(weekStart, -7))} aria-label="Previous week">
             <ChevronLeft size={18} />
           </button>
@@ -36,6 +41,8 @@ export default function WeekView() {
           </button>
         </div>
       </header>
+
+      {copyingWeek && <CopyWeekDialog sourceStart={weekStart} onClose={() => setCopyingWeek(false)} />}
 
       <div className="summary-bar card">
         <div><strong>{countDays(weekWorkouts)}</strong> gym days</div>

@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Pencil } from 'lucide-react'
+import { Copy, Pencil } from 'lucide-react'
 import type { Workout } from '../lib/types'
 import { fmt, fromISO } from '../lib/dates'
+import CopyWorkoutDialog from './CopyWorkoutDialog'
 
 export default function WorkoutCard({ workout, showDate = true }: { workout: Workout; showDate?: boolean }) {
+  const [copying, setCopying] = useState(false)
   const totalSets = workout.exercises.reduce((n, e) => n + (Number(e.sets) || 0), 0)
   return (
     <article className="card workout">
@@ -15,6 +18,9 @@ export default function WorkoutCard({ workout, showDate = true }: { workout: Wor
         <div className="workout-meta">
           <span className="pill">{workout.exercises.length} exercises</span>
           <span className="pill">{totalSets} sets</span>
+          <button className="icon-btn" onClick={() => setCopying(true)} aria-label="Copy workout to other dates" title="Copy to other dates">
+            <Copy size={16} />
+          </button>
           <Link to={`/log/${workout.id}`} className="icon-btn" aria-label="Edit workout">
             <Pencil size={16} />
           </Link>
@@ -46,6 +52,7 @@ export default function WorkoutCard({ workout, showDate = true }: { workout: Wor
         </div>
       )}
       {workout.notes && <p className="notes">{workout.notes}</p>}
+      {copying && <CopyWorkoutDialog workout={workout} onClose={() => setCopying(false)} />}
     </article>
   )
 }

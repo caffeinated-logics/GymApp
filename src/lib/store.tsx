@@ -53,6 +53,8 @@ interface Store {
   get: (id: string) => Workout | undefined
   save: (w: Workout) => void
   remove: (id: string) => void
+  /** Add new workouts and/or remove existing ones in a single update. */
+  applyChanges: (add: Workout[], removeIds?: string[]) => void
   /** Restore from backup. 'replace' wipes current data; 'merge' adds/overwrites by id. */
   importAll: (ws: Workout[], mode: 'replace' | 'merge') => void
 }
@@ -79,6 +81,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
           prev.some((p) => p.id === w.id) ? prev.map((p) => (p.id === w.id ? w : p)) : [...prev, w],
         ),
       remove: (id) => setWorkouts((prev) => prev.filter((p) => p.id !== id)),
+      applyChanges: (add, removeIds = []) =>
+        setWorkouts((prev) => [...prev.filter((p) => !removeIds.includes(p.id)), ...add]),
       importAll: (ws, mode) =>
         setWorkouts((prev) => {
           if (mode === 'replace') return ws
